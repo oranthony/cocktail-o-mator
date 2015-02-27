@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="fr">
+    <head>
+        <meta charset="utf-8">
+        <title>Hello World</title>
+        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+        <link rel="stylesheet" href="style.css">
+        <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
+        <link href="css/style1.css" rel="stylesheet"> 
+    </head>
+    <body> 
+        <nav class="navbar navbar-default navbar-fixed-top">
+            <div class="navbar-inner">
+                <div class="container">
+                    <div id = "cleanheader"  aria-hidden="true">
+                        <img src="img/banderole.png" id="banderole" alt="banderole" class="img-responsive center-block">
+                        <div class="login" style="text-align: center">
+                            <a href="lien"> Logged in as  :   Dodo la sommure </a>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+        </nav>
+        <div id = "notnav">
+            <div class="middle">
+                <h1> Create a cocktail based on what you have in stock</h1>
+                <img src="img/back.png" id="cocktail" alt="cocktail" class="img-responsive center-block">
+            </div>
+            <div class = "startbutton" style="text-align: center">
+                <button id="startbutton" type="submit">Let's start</button>
+            </div>
+            <div class="searchbar">
+                <form method="GET">
+                    <section id="fetch" style="text-align: center">
+                        <input type="text" placeholder="Search for a cocktail" id="term" />
+                        <button id="search" type="submit">Find me a cocktail</button>
+                    </section>
+                </form>
+                <section id="result" style="text-align: center"/>
+                </section>
+                <section id="name">
+                </section>
+                <section id="description">
+                </section>
+                </div>
+            </div>
+        </div>
+        <script src="//code.jquery.com/jquery-1.11.2.min.js"></script>
+        <script src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+        <script src="http://assets.absolutdrinks.com/api/addb-0.5.2.js" type="text/javascript"></script>
+        <script src="bootstrap/js/bootstrap.min.js"></script>
+        <script src="js/recherche.js"></script>
+    </body>
+</html>
