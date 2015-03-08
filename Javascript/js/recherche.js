@@ -50,16 +50,17 @@
 
 $(document).ready(function(){
     originalForm = $('.searchbar').html();
-    $(".startbutton").click(function() {
+    /*$(".startbutton").click(function() {
       $(".middle").fadeOut();
       $( ".searchbar" ).fadeIn();
       $(".startbutton").fadeOut();
-    });
-    $(".searchbar").on('submit','form', OnSubmit); 
+    });*/
+    $(".searchbar").on('submit','form', SearchIngredient); 
 
 });
 
-function OnSubmit(data){
+//search for drink
+function SearchDrinkbyName(data){
     var drink = $(this).serialize(); 
     var drink = $('#term').val();
     $(this).find('input').prop('disable', true);
@@ -69,7 +70,7 @@ function OnSubmit(data){
         type: 'GET',
         url: "http://addb.absolutdrinks.com/quickSearch/drinks/" + drink + "/?apiKey=c6d792879d4b44119788eefc6748393a",
         data: 'json',
-        success: OnSuccess,
+        success: OnSuccessName,
         error: function(xhr, error){
           alert(xhr.responseText + ' ' + error + ' ' + xhr.status);
         }        
@@ -77,15 +78,92 @@ function OnSubmit(data){
     return false;
 }
 
-function OnSuccess(json){
+function OnSuccessName(json){
   $('#result').html('<h2 class="loading">Cocktail found </h2>');
   $('#name').html('<p><b>Name</b> : ' + JSON.stringify(json.result[0].name) + '</p>');    
   $('#description').html('<p><b>Description</b> : ' + JSON.stringify(json.result[0].descriptionPlain) + '</p>');
 }
 
+
+//search by ingedrient
+function SearchDrinkbyIngredient(data){
+    var drink = $(this).serialize(); 
+    var drink = $('#term').val();
+    $(this).find('input').prop('disable', true);
+    $(this).fadeOut('fast');
+    $('#result').html("<h2 class='loading'>Your cocktail is on its way!</h2>");
+    $.ajax({
+        type: 'GET',
+        url: "http://addb.absolutdrinks.com/drinks/with/" + drink + "/?apiKey=c6d792879d4b44119788eefc6748393a",
+        data: 'json',
+        success: OnSuccessDrinkbyIngredient,
+        error: function(xhr, error){
+          alert(xhr.responseText + ' ' + error + ' ' + xhr.status);
+        }        
+    });
+    return false;
+}
+
+function OnSuccessDrinkbyIngredient(json){
+  $('#result').html('<h2 class="loading">Cocktail found </h2>');
+  $('#name').html('<p><b>Name</b> : ' + JSON.stringify(json.result[0].name) + '</p>');    
+  $('#description').html('<p><b>Description</b> : ' + JSON.stringify(json.result[0].description) + '</p>')
+}
+
+
+//search Ingredient
+function SearchIngredient(data){
+    var drink = $(this).serialize(); 
+    var drink = $('#term').val();
+    $(this).find('input').prop('disable', true);
+    $(this).fadeOut('fast');
+    $('#result').html("<h2 class='loading'>Your cocktail is on its way!</h2>");
+    $.ajax({
+        type: 'GET',
+        url: "http://addb.absolutdrinks.com/quickSearch/ingredients/"+  drink +"?apiKey=c6d792879d4b44119788eefc6748393a",
+        data: 'json',
+        success: OnSuccessIngredient,
+        error: function(xhr, error){
+          alert(xhr.responseText + ' ' + error + ' ' + xhr.status);
+        }        
+    });
+    return false;
+}
+
+function OnSuccessIngredient(json){
+  $('#result').html('<h2 class="loading">Cocktail found </h2>');
+  $('#name').html('<p><b>Name</b> : ' + JSON.stringify(json.result[0].name) + '</p>');    
+  $('#description').html('<p><b>Description</b> : ' + JSON.stringify(json.result[0].description) + '</p>')
+}
+
+
+
+
+
+
+
+
+
+
 $( ".searchbar" ).hide();
 
 
+//animate
+
+  //home page picture move to the left
+  $(".startbutton").click(function(){
+        $(".middle").animate({ 
+          right: '5000px'
+        }, 700 , function(){
+            //search bar appear
+            $( ".searchbar" ).show();
+            $(".searchbar").animate({
+              left: '1px'
+              }, 200);
+        });
+  });
+
+//inscription appear
 
 //resize nav bar
 
@@ -103,14 +181,83 @@ if ($(this).scrollTop() > 1){
   }
 });
 
+//suggest
+/*
+$('#search').keyup(function() {
 
-/*addb.init({
-    appId: 2467
+$.getJSON('../data.json', function(data) {
+     var output = '<ul class= "searchresults">';
+     $.each(data, function (key, val){ 
+         output += '<li>';
+         output += '<h2>' + val.name + '<h2>';
+         output += '<img src="images/' + val.shortname + '+_tn.jpg" alt="' + val.name + '" />';
+         output += '<p>' + val.bio + '</p>';
+         output += '</li>';
+     }) ;
+    output += '</ul>';
+    $('#update').html(output);
+});//end of $.getJSON 
 
+    });// End of $("search)
+*/
+
+$('#searchbar').on("input", function() {
+  var dInput = this.value;
+  if(dInput.length > 1){
+    $.ajax({
+        type: 'GET',
+        url: "http://addb.absolutdrinks.com/quickSearch/ingredients/"+  dInput +"?apiKey=c6d792879d4b44119788eefc6748393a",
+        data: 'json',
+        success: OnSuccesstabIngredient,
+        error: function(xhr, error){
+          alert(xhr.responseText + ' ' + error + ' ' + xhr.status);
+        }        
+    });
+  }//i
 });
-addb.configuration.defaultPageSize = 10;
 
-addb.drinks().load('absolut-cosmopolitan', function(shake) { });*/
+function OnSuccesstabIngredient(json){
+  //$('#result').html('<h2 class="loading">Cocktail found </h2>');
+
+  //base spirit
+  $('#base-spirit-table').html('<thead><tr><th>Base spirit</th></tr></thead>');
+  $.each(json, function (key, data) {
+    $.each(data, function (index, data) {
+      if(data.isBaseSpirit == true || data.type == 'spirits-other')
+        $('#base-spirit-table').append('<tr><td>' + JSON.stringify(data.name) + '</td></tr>');
+    })
+  })
+
+  //mixers"type":"mixers"
+  $('#Mixers-table').html('<thead><tr><th>Mixers</th></tr></thead>');
+  $.each(json, function (key, data) {
+    $.each(data, function (index, data) {
+      if(data.type == 'mixers')
+        $('#Mixers-table').append('<tr><td>' + JSON.stringify(data.name) + '</td></tr>');
+    })
+  })
+
+  //fruit
+  $('#Fruit-table').html('<thead><tr><th>Fruits</th></tr></thead>');
+  $.each(json, function (key, data) {
+    $.each(data, function (index, data) {
+      if(data.type == 'fruits')
+        $('#Fruit-table').append('<tr><td>' + JSON.stringify(data.name) + '</td></tr>');
+    })
+  })
+
+  //Ingredients
+  $('#Ingredients-table').html('<thead><tr><th>Ingredients</th></tr></thead>');
+  $.each(json, function (key, data) {
+    $.each(data, function (index, data) {
+      if(data.type == 'others')
+        $('#Ingredients-table').append('<tr><td>' + JSON.stringify(data.name) + '</td></tr>');
+    })
+  })
+  
+}
+
+
 
 
 

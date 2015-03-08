@@ -101,12 +101,54 @@ body.sticky {
 }
 
 .middle {
+	position: relative;
 	text-align: center;
 
 
 }
 
+.searchbar {
+	position: relative;
+	top: -600px;
+	left: 5000px;
+}
 
+.row {
+	position: relative;
+	margin-left: 30px;
+	
+}
+
+.table1 {
+	overflow: auto;
+	max-height: 400px;
+}
+
+.inscription {
+	position: relative;
+	top: -600px;
+	right: 5000px;
+}
+
+
+
+
+/*tr {
+	width: 100%;
+	display: inline-table;
+}
+
+table{
+	max-height: 500px;
+}
+
+tbody{
+	overflow-y: scroll;
+	max-height: 490px;
+	width: 90%; 
+	position: absolute;
+}
+*/
 
 
 

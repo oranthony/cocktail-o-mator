@@ -22,21 +22,74 @@
                 </div>
             </div>
         </nav>
+        <div class = "inscription"> 
+            <a href="df"> vvvv</a>
+        </div>
         <div id = "notnav">
             <div class="middle">
                 <h1> Create a cocktail based on what you have in stock</h1>
                 <img src="img/back.png" id="cocktail" alt="cocktail" class="img-responsive center-block">
-            </div>
-            <div class = "startbutton" style="text-align: center">
-                <button id="startbutton" type="submit">Let's start</button>
+                <div class = "startbutton" style="text-align: center">
+                    <button id="startbutton" type="submit">Let's start</button>
+                </div>
             </div>
             <div class="searchbar">
                 <form method="GET">
-                    <section id="fetch" style="text-align: center">
-                        <input type="text" placeholder="Search for a cocktail" id="term" />
-                        <button id="search" type="submit">Find me a cocktail</button>
+                    <section id="fetch" style="text-align: center" style="display: none">
+                        <input id="searchbar" type="text" placeholder="Search for a cocktail" id="term" />
+                        <button id="search" type="text">Find me a cocktail</button>
                     </section>
                 </form>
+                <div class="row">
+                    <div class="col-sm-2" style="background-color:grey;">
+                        <div class="table1"> 
+                            <table class="table" id="base-spirit-table">
+                                <thead>
+                                  <tr>
+                                    <th>Base spirit</th>
+                                  </tr>
+                                </thead>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="col-sm-1"></div>
+                    <div class="col-sm-2" style="background-color:grey;">
+                        <div class="table1"> 
+                            <table class="table" id="Mixers-table">
+                                <thead>
+                                  <tr>
+                                    <th>Mixers</th>
+                                  </tr>
+                                </thead>
+                            </table>
+                        </div> 
+                    </div>
+                    <div class="col-sm-1"></div>
+                    <div class="col-sm-2" style="background-color:grey;">
+                        <div class="table1"> 
+                            <table class="table" id="Fruit-table">
+                                <thead>
+                                  <tr>
+                                    <th>Fruits</th>
+                                  </tr>
+                                </thead>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="col-sm-1"></div>
+                    <div class="col-sm-2" style="background-color:grey;">
+                        <div class="table1"> 
+                            <table class="table" id="Ingredients-table">
+                                <thead>
+                                  <tr>
+                                    <th>Ingredients</th>
+                                  </tr>
+                                </thead>
+                            </table>
+                        </div> 
+                    </div>
+                </div>
+                <div id="output"></div>
                 <section id="result" style="text-align: center"/>
                 </section>
                 <section id="name">
@@ -48,6 +101,8 @@
         </div>
         <script src="//code.jquery.com/jquery-1.11.2.min.js"></script>
         <script src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+        <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.3/themes/smoothness/jquery-ui.css" />
+        <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.3/jquery-ui.min.js"></script>
         <script src="http://assets.absolutdrinks.com/api/addb-0.5.2.js" type="text/javascript"></script>
         <script src="bootstrap/js/bootstrap.min.js"></script>
         <script src="js/recherche.js"></script>
