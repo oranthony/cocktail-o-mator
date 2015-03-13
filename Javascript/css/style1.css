@@ -66,10 +66,29 @@ body.sticky {
 
 
 
+
+#tag{
+	display: table;
+	border: 1px solid green ;
+	background-color: white;
+}
+
+/*#tag:after {
+	content: "x";
+}*/
+
+.tag-close:before {
+	margin-left: 5px;
+}
+
+.tag-close {
+	cursor: pointer;
+}
+
 .navbar {
 	background-color: #e9ffd2;
 	font-size: 90%;
-	background:transparent;
+	
 	z-index: 10000000000;
 	
 }
@@ -109,7 +128,7 @@ body.sticky {
 
 .searchbar {
 	position: relative;
-	top: -600px;
+	top: -300px;
 	left: 5000px;
 }
 
@@ -123,6 +142,8 @@ body.sticky {
 	overflow: auto;
 	max-height: 400px;
 }
+
+a { color: inherit; } 
 
 .inscription {
 	position: relative;
