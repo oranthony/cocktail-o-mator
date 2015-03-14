@@ -312,13 +312,16 @@ var ingredientQuery =[];
 $('body').on('click', '#base-spirit-table a, #Mixers-table a, #Fruit-table a, #Ingredients-table a', function(event) {
   event.preventDefault();
         var href = $(this).text();
+        var a_href = $(this).attr('href');
         console.log('this');
         console.log(this);
         console.log('href:');
         console.log(href);
+        console.log('href_a:');
+        console.log(a_href);
         //var name = $(this).closest('td').text();
         //console.log(name);
-        var currText = href;
+        var currText = a_href;
         //<button type='button' class='close' data-dismiss='alert'>lemonade X</button>
         //$(".searchbar").append('<input type="text" value='+ $currText +' data-role="tagsinput"/>')
         //$("#myTags").append('<li>' + $currText + '</li>')
@@ -329,9 +332,9 @@ $('body').on('click', '#base-spirit-table a, #Mixers-table a, #Fruit-table a, #I
         $("#myTags").append('<span id="tag">' + currText + '<span class="glyphicon glyphicon-record tag-close"></span></span>')
 
 
-        if(href) {
+        if(a_href) {
             
-            ingredientQuery.push(href);
+            ingredientQuery.push(a_href);
         }
         console.log(ingredientQuery);
         console.log(ingredientQuery.length);
