@@ -67,11 +67,31 @@ body.sticky {
 
 
 
-#tag{
-	display: table;
-	border: 1px solid green ;
-	background-color: white;
+#base-spirit-table-tag {
+	background-color: #E8BC6F;
 }
+
+#Mixers-table-tag {
+	background-color: #FF635E;
+}
+
+#Fruit-table-tag {
+	background-color: #C6AEE8;
+} 
+
+#Ingredients-table-tag {
+	background-color: #CCF2FF;
+}
+
+
+#base-spirit-table-tag, #Mixers-table-tag, #Fruit-table-tag, #Ingredients-table-tag {
+	/*display: table;*/
+	padding: 8px;
+	margin-left: 30px;
+	border-radius: 50px;
+	text-align: right;
+}
+
 
 /*#tag:after {
 	content: "x";
@@ -88,18 +108,13 @@ body.sticky {
 .navbar {
 	background-color: #e9ffd2;
 	font-size: 90%;
-	
+	border-bottom: -60px;
 	z-index: 10000000000;
 	
 }
 
-#cleanheader {
-	filter: blur(4px); 
-	overflow: hidden;
-}
-
-.navbar-inner {
-    //background:transparent;
+header.tc-header {
+	border-bottom: 0;
 }
 
 .navbar img {
@@ -109,8 +124,8 @@ body.sticky {
 }
 
 .navbar.sticky img {
-	height: 60%;
-	width: 60%;
+	height: 50%;
+	width: 50%;
 }
 
 
@@ -126,9 +141,13 @@ body.sticky {
 
 }
 
+.searchbar form {
+	margin-bottom: 30px;
+}
+
 .searchbar {
 	position: relative;
-	top: -300px;
+
 	left: 5000px;
 }
 
@@ -140,16 +159,27 @@ body.sticky {
 
 .table1 {
 	overflow: auto;
-	max-height: 400px;
+	max-height: 300px;
+
+}
+
+#base-spirit-table {
+	background-color: #E8BC6F;
+}
+
+#Mixers-table {
+	background-color: #FF635E;
+}
+
+#Fruit-table {
+	background-color: #C6AEE8;
+}
+
+#Ingredients-table {
+	background-color: #CCF2FF;
 }
 
 a { color: inherit; } 
-
-.inscription {
-	position: relative;
-	top: -600px;
-	right: 5000px;
-}
 
 
 
