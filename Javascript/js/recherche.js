@@ -51,15 +51,20 @@ function SearchDrinkbyIngredient(data){
 
 //******************
 
+function ClearDrinkShow(){
+  $('#result').children().remove();
+}
+
+//show the picture of the drinks found
 function OnSuccessDrinkbyIngredient(drinkfound){
   var url;
   $('#result').children().remove();
   $('#result').append(
     $('<div />').addClass('row')
   )
-  console.log(drinkfound);
+  //console.log(drinkfound);
   $.each(drinkfound.result, function (i, item) {
-    console.log(drinkfound.result[i].id);
+    //console.log(drinkfound.result[i].id);
     url = decodeURI('http://assets.absolutdrinks.com/drinks/transparent-background-white/180x180/'+drinkfound.result[i].id+'.png');
     $('#result').append(
       $('<div />').addClass('col-sm-2 text-center')
@@ -211,6 +216,10 @@ function createTag(nameTag) {
 //delete tag
 $("#myTags").on('click', '.tag-close', function() {
   $(this).parent().fadeOut();
+  var deleted_tag = $(this).parent().attr('class');
+  console.log("deleted tag");
+  console.log(deleted_tag);
+  AjaxCall(deleted_tag, 'delete');
 
 })
 
@@ -222,44 +231,78 @@ $("#myTags").on('click', '.tag-close', function() {
 var ingredientQuery =[];
 $('body').on('click', '#base-spirit-table a, #Mixers-table a, #Fruit-table a, #Ingredients-table a', function(event) {
   event.preventDefault();
-        var href = $(this).text();
-        var a_href = $(this).attr('href');
 
+        //name of the ingredient
+        var Ingredient_Name = $(this).text();
+
+        //ID of the ingredient
+        var Ingredient_ID = $(this).attr('href');
+
+        //get the type of the selected ingredient (base-spirit, fruits.....) to have the tag and the table with the same color
         var typofTag = $(this).closest('.table').attr('id');
+        //create the tag
         typofTag += "-tag";
+        //show the tag
+        $("#myTags").append('<span id='+ typofTag +' class=' + Ingredient_ID +'>' + Ingredient_Name + '<span class="glyphicon glyphicon-record tag-close"></span></span>')
 
-        var currText = a_href;
-        $("#myTags").append('<span id='+ typofTag +'>' + currText + '<span class="glyphicon glyphicon-record tag-close"></span></span>')
+        AjaxCall(Ingredient_ID, 'add');
 
-
-        if(a_href) {
-            
-            ingredientQuery.push(a_href);
-        }
-
-        if(ingredientQuery.length >= 1){
-          var querry = '';
-          for(i = 0; i < ingredientQuery.length; ++i){
-            querry += 'with/' + ingredientQuery[i] + '/';
-          }
-
-           $.ajax({
-            type: 'GET',
-            url: "http://addb.absolutdrinks.com/drinks/" + querry + "?apiKey=c6d792879d4b44119788eefc6748393a",
-            data: 'drinkfound',
-            success: OnSuccessDrinkbyIngredient,
-            error: function(xhr, error){
-              alert(xhr.responseText + ' ' + error + ' ' + xhr.status);
-            }        
-          });
-        }
+        
     });
 
+var savequery;
+function AjaxCall(Ingredient_ID, action) {
+  if(!Ingredient_ID) {
+            console.log("no ingredient passed");
+        }
+
+  var querry = '';
+  if(action == 'add') {      
+    ingredientQuery.push(Ingredient_ID);
+    
+    for(i = 0; i < ingredientQuery.length; ++i){
+      querry += 'with/' + ingredientQuery[i] + '/';
+    }
+    console.log("query when added");
+    console.log(querry);
+  }
+  else if(action == 'delete'){
+    var IDPos = $.inArray( Ingredient_ID, ingredientQuery );
+    console.log("IDPos");
+    console.log(IDPos);
+    ingredientQuery.splice(IDPos, 1)
+    console.log("ingredientQuery whithout id");
+    console.log(ingredientQuery);
+    querry = '';
+    for(i = 0; i < ingredientQuery.length; ++i){
+      querry += 'with/' + ingredientQuery[i] + '/';
+    }
+    if(ingredientQuery.length == 0){
+      ClearDrinkShow();
+    }
+  }
+  if(ingredientQuery.length >= 1){
+     $.ajax({
+      type: 'GET',
+      url: "http://addb.absolutdrinks.com/drinks/" + querry + "?apiKey=c6d792879d4b44119788eefc6748393a",
+      data: 'drinkfound',
+      success: OnSuccessDrinkbyIngredient,
+      error: function(xhr, error){
+        alert(xhr.responseText + ' ' + error + ' ' + xhr.status);
+      }        
+    });
+  }
+   console.log(querry);     
+  
+}
+
+
+
 //get the id of the clicked drink
- $('#result').on('click', '*', function() {
+ $('#result').on('click', 'img', function() {
   var b_href = $(this).attr('alt');
-  //alert(b_href);
   console.log(b_href);
+  
   $.ajax({
             type: 'GET',
             url: "http://addb.absolutdrinks.com/drinks/" + b_href + "/howtomix/?apiKey=c6d792879d4b44119788eefc6748393a",
@@ -269,11 +312,23 @@ $('body').on('click', '#base-spirit-table a, #Mixers-table a, #Fruit-table a, #I
               alert(xhr.responseText + ' ' + error + ' ' + xhr.status);
             }        
           });
+
+  $(this).parent().parent().prepend(
+      $('<div />').addClass('col-sm-2 text-center')
+        .append('<p>coucou</p>')
+    )
+
 });
 
 
 function OnSuccessDrinkInfo(drinkInfo){
   console.log(drinkInfo);
+  var step = [];
+  for(i = 0; i < drinkInfo.steps.length; ++i){
+    //step[i] = drinkInfo.steps[i].textPlain;
+    step[i] = drinkInfo.steps[i].textPlain;
+  }
+  console.log(step);
 }
 
 
