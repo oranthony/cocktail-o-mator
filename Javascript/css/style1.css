@@ -182,7 +182,9 @@ header.tc-header {
 a { color: inherit; } 
 
 
-
+.popover{
+	min-width: 350px;
+}
 
 /*tr {
 	width: 100%;
