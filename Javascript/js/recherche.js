@@ -17,9 +17,9 @@ function SearchDrinkbyName(data){
     $('#result').html("<h2 class='loading'>Your cocktail is on its way!</h2>");
     $.ajax({
         type: 'GET',
-        url: "http://addb.absolutdrinks.com/quickSearch/drinks/" + drink + "/?apiKey=c6d792879d4b44119788eefc6748393a",
-        dataType : 'jsonp',
-        jsonp : 'callback',
+        url: "http://addb.absolutdrinks.com/quickSearch/drinks/" + drink + "/?apiKey=c5be6662554341cdac0fd78d1677193a",
+        dataType: 'jsonp',
+        crossDomain: true,
         success: OnSuccessName,
         error: function(xhr, error){
           alert(xhr.responseText + ' ' + error + ' ' + xhr.status);
@@ -39,9 +39,9 @@ function OnSuccessName(json){
 function SearchDrinkbyIngredient(data){
     $.ajax({
         type: 'GET',
-        url: "http://addb.absolutdrinks.com/drinks/with/apple-liqueur/lemonade/?apiKey=c6d792879d4b44119788eefc6748393a",
-        dataType : 'jsonp',
-        jsonp : 'callback',
+        url: "http://addb.absolutdrinks.com/drinks/with/apple-liqueur/lemonade/?apiKey=c5be6662554341cdac0fd78d1677193a",
+        dataType: 'jsonp',
+        crossDomain: true,
         success: OnSuccessDrinkbyIngredient,
         error: function(xhr, error){
           alert(xhr.responseText + ' ' + error + ' ' + xhr.status);
@@ -96,8 +96,6 @@ function OnSuccessDrinkbyIngredient(drinkfound){
 }
 //*******************
 
-//$('[data-toggle="popover"]').popover();
-
 $(function ()  
 { $("#example").popover({trigger: 'focus'});  
 });  
@@ -111,10 +109,9 @@ function SearchIngredient(data){
     $('#result').html("<h2 class='loading'>Your cocktail is on its way!</h2>");
     $.ajax({
         type: 'GET',
-        url: "http://addb.absolutdrinks.com/quickSearch/ingredients/"+  drink +"?apiKey=c6d792879d4b44119788eefc6748393a",
-        
-        dataType : 'jsonp',
-        jsonp : 'callback',
+        url: "http://addb.absolutdrinks.com/quickSearch/ingredients/"+  drink +"?apiKey=c5be6662554341cdac0fd78d1677193a",
+        dataType: 'jsonp',  //use jsonp data type in order to perform cross domain ajax
+        crossDomain: true,
         success: OnSuccessIngredient,
         error: function(xhr, error){
           alert(xhr.responseText + ' ' + error + ' ' + xhr.status);
@@ -122,22 +119,6 @@ function SearchIngredient(data){
     });
     return false;
 }
-
-function OnSuccessIngredient(json){
-  $('#result').html('<h2 class="loading">Cocktail found </h2>');
-  $('#name').html('<p><b>Name</b> : ' + JSON.stringify(json.result[0].name) + '</p>');    
-  $('#description').html('<p><b>Description</b> : ' + JSON.stringify(json.result[0].description) + '</p>')
-}
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -183,8 +164,9 @@ $('#searchbar').on("input", function() {
   if(dInput.length > 1){
     $.ajax({
         type: 'GET',
-        url: "http://addb.absolutdrinks.com/quickSearch/ingredients/"+  dInput +"?apiKey=c6d792879d4b44119788eefc6748393a",
-        
+        url: "http://addb.absolutdrinks.com/quickSearch/ingredients/"+  dInput +"?apiKey=c5be6662554341cdac0fd78d1677193a",
+        dataType: 'jsonp',  
+        crossDomain: true,
         success: OnSuccesstabIngredient,
         error: function(xhr, error){
           alert(xhr.responseText + ' ' + error + ' ' + xhr.status);
@@ -194,7 +176,6 @@ $('#searchbar').on("input", function() {
 });
 
 function OnSuccesstabIngredient(json){
-  //$('#result').html('<h2 class="loading">Cocktail found </h2>');
 
   //base spirit
   $('#base-spirit-table').html('<thead><tr><th>Base spirit</th></tr></thead>');
@@ -235,12 +216,6 @@ function OnSuccesstabIngredient(json){
     })
   })
   
-}
-
-
-//function create tag
-function createTag(nameTag) {
-
 }
 
 //delete tag
@@ -312,123 +287,43 @@ function AjaxCall(Ingredient_ID, action) {
     }
   }
   if(ingredientQuery.length >= 1){
-    $('#result').html('<img src="img/ajax-loader.gif" id="loading" alt="loading" class="img-responsive center-block">');
-     $.ajax({
+
+    
+    setTimeout(function() {
+      // Do something after 3 seconds
+      // This can be direct code, or call to some other function
+      $.ajax({
       type: 'GET',
-      url: "http://addb.absolutdrinks.com/drinks/" + querry + "?apiKey=c6d792879d4b44119788eefc6748393a",
-      dataType : 'jsonp',
-        jsonp : 'callback',
-      data: 'drinkfound',
+      url: "http://addb.absolutdrinks.com/drinks/" + querry + "?apiKey=c5be6662554341cdac0fd78d1677193a",
+      dataType: 'jsonp',  
+      crossDomain: true,
       success: OnSuccessDrinkbyIngredient,
       error: function(xhr, error){
         alert(xhr.responseText + ' ' + error + ' ' + xhr.status);
       }        
     });
+     }, 800);    
+
+    $('#result').html('<img src="img/ajax-loader.gif" id="loading" alt="loading" loop=infinite class="img-responsive center-block">');
+    
+     
   }
    console.log(querry);     
   
 }
-
-
-
-//get the id of the clicked drink
-/* $('#result').on('click', 'img', function() {
-  var b_href = $(this).attr('alt');
-  console.log(b_href);
-  
-  $.ajax({
-            type: 'GET',
-            url: "http://addb.absolutdrinks.com/drinks/" + b_href + "/howtomix/?apiKey=c6d792879d4b44119788eefc6748393a",
-            data: 'drinkInfo',
-            success: OnSuccessDrinkInfo,
-            error: function(xhr, error){
-              alert(xhr.responseText + ' ' + error + ' ' + xhr.status);
-            }        
-          });
-
-  /*$(this).parent().parent().prepend(
-      $('<div />').addClass('col-sm-2 text-center')
-        .append('<p>coucou</p>')
-    )*/
-
-//});
-
-
-/*function OnSuccessDrinkInfo(drinkInfo){
-  console.log(drinkInfo);
-  var step = [];
-  for(i = 0; i < drinkInfo.steps.length; ++i){
-    //step[i] = drinkInfo.steps[i].textPlain;
-    step[i] = drinkInfo.steps[i].textPlain;
-  }
-  console.log(step);
-}*/
 
 function GenerateRecipe(DrinkFound){
   //console.log("appel depuis la fonct");
   //console.log(DrinkId);
 
   return $.ajax({
-            type: 'GET',
-            url: "http://addb.absolutdrinks.com/drinks/" + DrinkFound + "/howtomix/?apiKey=c6d792879d4b44119788eefc6748393a",
-            dataType : 'jsonp',
-        jsonp : 'callback',
-            error: function(xhr, error){
-              alert(xhr.responseText + ' ' + error + ' ' + xhr.status);
-            }        
-          });
+    type: 'GET',
+    url: "http://addb.absolutdrinks.com/drinks/" + DrinkFound + "/howtomix/?apiKey=c5be6662554341cdac0fd78d1677193a",
+    dataType: 'jsonp',  //use jsonp data type in order to perform cross domain ajax
+    crossDomain: true,
+    error: function(xhr, error){
+      alert(xhr.responseText + ' ' + error + ' ' + xhr.status);
+    }        
+  });
 
 }
-
-  
-
-
-
-
-
-
-
-
-
-// blur effect
-
-/*var pageContent = document.getElementById("notnav"),
-  pagecopy = pageContent.cloneNode(true),
-  blurryContent = document.getElementById("cleanheader");
-  blurryContent.appendChild(pagecopy);
-  window.onscroll = function() { blurryContent.scrollTop = window.pageYOffset; }
-*/
-
-/*$(function(){
-      html2canvas($(".notnav"), { 
-        onrendered: function(canvas) {
-          $(".blurheader").append(canvas);
-          $("canvas").attr("id","canvas");
-          stackBlurCanvasRGB('canvas', 0, 0, $("canvas").width(), $("canvas").height(), 20);
-        }
-        
-      
-      });
-      vv = setTimeout(function(){
-        $(".cleanheader").show();
-        clearTimeout(vv);
-      },200)
-})
-
-
-$(window).scroll(function(){
-  $("canvas").css("-webkit-transform", "translatey(-" + $(window).scrollTop() + "px)");
-})
-
-window.onresize = function(){
-  $("canvas").width($(window).width());
-}
-
-$(document).bind('touchmove', function(){
-  $("canvas").css("-webkit-transform", "translatey(-" + $(window).scrollTop() + "px)");
-})
-
-$(document).bind('touchend', function(){
-  $("canvas").css("-webkit-transform", "translatey(-" + $(window).scrollTop() + "px)");
-})*/
-
