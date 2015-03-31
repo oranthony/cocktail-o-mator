@@ -1,0 +1,42 @@
+.ui-page {
+	background: #e9ffd2;
+}
+
+.tag-close:before {
+	margin-left: 5px;
+}
+
+.tag-close {
+	cursor: pointer;
+}
+
+a { color: red; } 
+
+#base-spirit-tag, #mixers-tag, #fruit-tag, #ingredients-tag {
+	display: block;
+	padding: 8px;
+	margin-left: 30px;
+	border-radius: 50px;
+	text-align: right;
+}
+
+#base-spirit-tag{
+	background-color: #E8BC6F;
+}
+
+#mixers-tag{
+	background-color: #FF635E;
+}
+
+#fruit-tag{
+	background-color: #C6AEE8;
+}
+
+#ingredients-tag{
+	background-color: #CCF2FF;
+}
+
+#loading {
+	height: 80px;
+	width: 80px;
+}

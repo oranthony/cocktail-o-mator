@@ -20,45 +20,47 @@ $('#searchbar').on("input", function() {
 function OnSuccesstabIngredient(json){
 
   //base spirit
-  $('#base-spirit-table').html('<thead><tr><th>Base spirit</th></tr></thead>');
+  $('#base-spirit').empty();
   $.each(json, function (key, data) {
     $.each(data, function (index, data) {
       if(data.isBaseSpirit == true || data.type == 'spirits-other')
-        $('#base-spirit-table').append('<tr><td><a href='+JSON.stringify(data.id)+'>' + JSON.stringify(data.name) + '</a></td></tr>');
+        $('#base-spirit').append('<li class="ui-li-static ui-body-inherit"><a style="color:#E8BC6F" text-decoration: none; href='+JSON.stringify(data.id)+'>' + JSON.stringify(data.name) + '</a></li>');
     })
   })
- 
+  //$('#base-spirit ul').listview().listview('refresh');
+
   //mixers"type":"mixers"
-  $('#Mixers-table').html('<thead><tr><th>Mixers</th></tr></thead>');
+  $('#mixers').empty();
   $.each(json, function (key, data) {
     $.each(data, function (index, data) {
       if(data.type == 'mixers')
-        $('#Mixers-table').append('<tr><td><a href='+JSON.stringify(data.id)+'>' + JSON.stringify(data.name) + '</a></td></tr>');
+        $('#mixers').append('<li class="ui-li-static ui-body-inherit"><a style="color:#FF635E" text-decoration: none; href='+JSON.stringify(data.id)+'>' + JSON.stringify(data.name) + '</a></li>');
     })
   })
+ // $('#mixers').
 
   //fruit
-  $('#Fruit-table').html('<thead><tr><th>Fruits</th></tr></thead>');
+  $('#fruits').empty();
   $.each(json, function (key, data) {
-
     $.each(data, function (index, data) {
       if(data.type == 'fruits')
-        $('#Fruit-table').append('<tr><td><a href='+JSON.stringify(data.id)+'>' + JSON.stringify(data.name) + '</a></td></tr>');
+        $('#fruits').append('<li class="ui-li-static ui-body-inherit"><a style="color:#A8A0E8" text-decoration: none; href='+JSON.stringify(data.id)+'>' + JSON.stringify(data.name) + '</a></li>');
     })
   })
 
   //Ingredients
-  $('#Ingredients-table').html('<thead><tr><th>Ingredients</th></tr></thead>');
+  $('#ingredients').empty();
   $.each(json, function (key, data) {
     $.each(data, function (index, data) {
       if(data.type == 'others')
-        $('#Ingredients-table').append('<tr><td><a href='+JSON.stringify(data.id)+'>' + JSON.stringify(data.name) + '</a></td></tr>');
+        $('#ingredients').append('<li class="ui-li-static ui-body-inherit"><a style="color:#6EC6FF" text-decoration: none; href='+JSON.stringify(data.id)+'>' + JSON.stringify(data.name) + '</a></li>');
     })
   })
+  //$('#base-spirit').
 }//OnSuccesstabIngredient
 
 /* When the user click on an ingredient on the table, this function generate the tag then call the function AjaxCall with the selected ingredient*/
-$('body').on('click', '#base-spirit-table a, #Mixers-table a, #Fruit-table a, #Ingredients-table a', function(event) {
+$('body').on('click', '#base-spirit a, #mixers a, #fruit a, #ingredients a', function(event) {
   event.preventDefault();
 
     //name of the ingredient
@@ -68,7 +70,7 @@ $('body').on('click', '#base-spirit-table a, #Mixers-table a, #Fruit-table a, #I
     var Ingredient_ID = $(this).attr('href');
 
     //get the type of the selected ingredient (base-spirit, fruits.....) to have the tag and the table with the same color
-    var typofTag = $(this).closest('.table').attr('id');
+    var typofTag = $(this).closest('ul').attr('id');
 
     //create the tag
     typofTag += "-tag";
@@ -124,8 +126,7 @@ function AjaxCall(Ingredient_ID, action) {
 
   /* Start to search when there is almost 1 ingredient in the query, Here I'm sure the ajax is not called when all the ingredients of the query are deleted */
   if(ingredientQuery.length >= 1){
-    $('#result').html('<img src="img/ajax-loader.gif" id="loading" alt="loading" loop=infinite class="img-responsive center-block">');
-
+    setTimeout(function() {
       // Call ajax after 0,8 seconds, time for the loading Gif to load at least once, more if the ajax call is longer
       $.ajax({
       type: 'GET',
@@ -133,16 +134,13 @@ function AjaxCall(Ingredient_ID, action) {
       dataType: 'jsonp',  
       crossDomain: true,
       success: OnSuccessDrinkbyIngredient,
-      
       error: function(xhr, error){
         alert(xhr.responseText + ' ' + error + ' ' + xhr.status);
-      }}).always(function(){
-        $('#loading').remove();
-      });
-       
+      }});
+     }, 800);   
 
      //show the loading gif
-      
+    $('#result').html('<img src="img/ajax-loader.gif" id="loading" alt="loading" loop=infinite class="img-responsive center-block">');  
   }//if    
 }//AjaxCall
 
@@ -151,9 +149,6 @@ function AjaxCall(Ingredient_ID, action) {
 function OnSuccessDrinkbyIngredient(drinkfound){
   var url;
   $('#result').children().remove();
-  $('#result').append(
-    $('<div />').addClass('row')
-  )
   
   //contient la recette
   //console.log(drinkfound);
@@ -170,13 +165,15 @@ function OnSuccessDrinkbyIngredient(drinkfound){
         step += data.steps[i].textPlain + ' ';
       }
       recette = step;
-      $('#result').append(
-        $('<div />').addClass('col-sm-2 text-center')
-          .append('<img src="' + url +'" id="' + drinkfound.result[i].id  + '" alt="' + drinkfound.result[i].id + '" style="width:200px; height:200px;" data-toggle="popover" data-original-title="' + drinkfound.result[i].name + '" /><p>' + JSON.stringify(drinkfound.result[i].name) + '</p>')
-      )//append
-      $('#result #' + drinkfound.result[i].id).popover({
+      if(typeof drinkfound.result[i] !== undefined){
+        $('#result').append(
+          $('<div />').addClass('col-sm-2 text-center')
+            .append('<img src="' + url +'" id="' + drinkfound.result[i].id  + '" alt="' + drinkfound.result[i].id + '" style="width:200px; height:200px;" data-toggle="popover" data-original-title="' + drinkfound.result[i].name + '" /><p>' + JSON.stringify(drinkfound.result[i].name) + '</p>')
+        )//append
+      }//if
+      /*$('#result #' + drinkfound.result[i].id).popover({
         content: recette
-      });
+      });*/
     })//GenerateRecipe
   });//each
 }//OnSuccessDrinkbyIngredient
@@ -259,6 +256,20 @@ if ($(this).scrollTop() > 1){
 });
 
 
+$('#result').on('click', 'img', function() {
+   var b_href = $(this).attr('alt');
+   console.log(b_href);
+   //<td><a href="page-transitions-dialog.html" data-role="button" data-rel="dialog" data-transition="slidedown" data-inline="true">dialog</a></td>
+/*function AjaxCall(Ingredient_ID, action) {
+             }        
+           });*/
+
+  /*$(this).parent().parent().prepend(
+       $('<div />').addClass('col-sm-2 text-center')
+         .append('<p>coucou</p>')
+   )
+  )*/
+});
 
 
 
