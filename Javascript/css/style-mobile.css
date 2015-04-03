@@ -13,7 +13,7 @@
 a { color: red; } 
 
 #base-spirit-tag, #mixers-tag, #fruit-tag, #ingredients-tag {
-	display: block;
+	display: inline-block;
 	padding: 8px;
 	margin-left: 30px;
 	border-radius: 50px;

@@ -24,13 +24,27 @@
                 <h1> Create a cocktail based on what you have in stock</h1>
                 <img src="img/back.png" id="cocktail" alt="cocktail" class="img-responsive center-block">
                 <div class = "startbutton" style="text-align: center">
-                    <button id="startbutton" type="submit">Let's start</button>
+                    <button id="startbutton" class="btn btn-default" type="submit">Let's start</button>
                 </div>
             </div>
             <div class="searchbar">
                 <form method="GET">
                     <section id="fetch" style="text-align: center" style="display: none">
-                        <input id="searchbar" type="text" placeholder="Search for a ingredients" id="term" />
+                        <div class="row">
+                            
+                                <!--<input id="searchbar" class="col-md-6 col-md-offset-3" type="text" placeholder="Search for a ingredients" id="term" />-->
+                            
+                            <div class="input-group col-md-6 col-md-offset-3">
+                              <input type="text" class="form-control" placeholder="Search for a ingredients" id="searchbar" aria-label="...">
+                              <div class="input-group-btn">
+                                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false" data-bind="label">Ingedient <span class="caret"></span></button>
+                                <ul class="dropdown-menu dropdown-menu-right" role="menu">
+                                  <li><a href="#">Ingredient</a></li>
+                                  <li><a href="#">Cocktail</a></li>
+                                </ul>
+                              </div><!-- /btn-group -->
+                            </div><!-- /input-group -->
+                        </div>
                     </section>
                 </form>
                 <div class="row">
@@ -94,8 +108,8 @@
                 </div>
             </div>
         </div>
-        <script src="//code.jquery.com/jquery-1.11.2.min.js"></script>
-        <script src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+        <!--<script src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>-->
         <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.3/themes/smoothness/jquery-ui.css" />
         <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.3/jquery-ui.min.js"></script>
         <script src="bootstrap/js/bootstrap.min.js"></script>

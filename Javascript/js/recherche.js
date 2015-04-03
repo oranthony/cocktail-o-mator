@@ -1,20 +1,94 @@
 
-//search the cocktails with the ingredients passed in data by ingedrient
-$('#searchbar').on("input", function() {
-  var dInput = this.value;
-  if(dInput.length > 1){
-    $.ajax({
-        type: 'GET',
-        url: "http://addb.absolutdrinks.com/quickSearch/ingredients/"+  dInput +"?apiKey=c5be6662554341cdac0fd78d1677193a",
-        dataType: 'jsonp',  
-        crossDomain: true,
-        success: OnSuccesstabIngredient,
-        error: function(xhr, error){
-          alert(xhr.responseText + ' ' + error + ' ' + xhr.status);
-        }        
-    });
-  }//i
+
+//******************************************
+//ANIMATION PART
+//******************************************
+
+//animate
+  //searchbar hidden
+  $( ".searchbar" ).hide();
+  //height of the div in the home page (picture)
+  var pictureHeight = $(".middle").height();
+  //remove the height of the picture in the main page to the searchbar in order to be on the top
+  $(".searchbar").css( "top", "-" + pictureHeight + "px" );
+  //home page picture move to the left
+  $(".startbutton").click(function(){
+        $(".middle").animate({ 
+          right: '5000px'
+        }, 700 , function(){
+            //search bar appear
+            $( ".searchbar" ).show().animate({
+              left: '1px'
+              }, 200);
+        });
+  });
+
+
+
+//resize nav bar
+$(window).scroll(function() {
+if ($(this).scrollTop() > 1){  
+    $('.navbar').addClass("sticky");
+    $('body').addClass("sticky");
+    $('.blurheader').addClass("sticky");
+  }
+  else{
+    $('.navbar').removeClass("sticky");
+    $('body').removeClass("sticky");
+    $('.blurheader').removeClass("sticky");
+  }
 });
+
+
+
+
+//******************************************
+//SEARCH PART
+//******************************************
+  
+  
+    TypeOfSearch = "Ingredient"; 
+    //search the cocktails with the ingredients passed in data by ingedrient
+    $('#searchbar').on("input", function() {
+      if(TypeOfSearch =='Ingredient') {
+        console.log("ingred");
+        var dInput = this.value;
+        if(dInput.length > 1){
+          $.ajax({
+              type: 'GET',
+              url: "http://addb.absolutdrinks.com/quickSearch/ingredients/"+  dInput +"?apiKey=c5be6662554341cdac0fd78d1677193a",
+              dataType: 'jsonp',  
+              crossDomain: true,
+              success: OnSuccesstabIngredient,
+              error: function(xhr, error){
+                alert(xhr.responseText + ' ' + error + ' ' + xhr.status);
+              }        
+          });
+        }
+      }//i
+     if(TypeOfSearch =='Cocktail'){
+        //clear tags
+        $("#myTags").children().fadeOut();
+        AjaxCall(null, 'delete_all');
+        //search for dirnks
+        var dInput = this.value;
+        if(dInput.length > 1){
+          $('#result').html('<img src="img/ajax-loader.gif" id="loading" alt="loading" loop=infinite class="img-responsive center-block">');
+          $.ajax({
+            type: 'GET',
+            url: "http://addb.absolutdrinks.com/quickSearch/drinks/" + dInput + "/?apiKey=c6d792879d4b44119788eefc6748393a",
+            dataType : 'jsonp',
+            crossDomain: true,
+            success: OnSuccessDrinkbyIngredient,
+            error: function(xhr, error){
+            alert(xhr.responseText + ' ' + error + ' ' + xhr.status);
+            }}).always(function(){
+              $('#loading').remove();
+          });     
+        }
+      }
+    });
+  
 
 //show the ingredient found in the tab of the type of the ingredient
 function OnSuccesstabIngredient(json){
@@ -122,6 +196,12 @@ function AjaxCall(Ingredient_ID, action) {
     }//if
   }//else
 
+  else if(action == 'delete_all'){
+    querry ='';
+    ClearDrinkShow();
+
+  }
+
   /* Start to search when there is almost 1 ingredient in the query, Here I'm sure the ajax is not called when all the ingredients of the query are deleted */
   if(ingredientQuery.length >= 1){
     $('#result').html('<img src="img/ajax-loader.gif" id="loading" alt="loading" loop=infinite class="img-responsive center-block">');
@@ -171,7 +251,7 @@ function OnSuccessDrinkbyIngredient(drinkfound){
       }
       recette = step;
       $('#result').append(
-        $('<div />').addClass('col-sm-2 text-center')
+        $('<div />').addClass('col-md-2 col-sm-2 col-lg-2 text-center')
           .append('<img src="' + url +'" id="' + drinkfound.result[i].id  + '" alt="' + drinkfound.result[i].id + '" style="width:200px; height:200px;" data-toggle="popover" data-original-title="' + drinkfound.result[i].name + '" /><p>' + JSON.stringify(drinkfound.result[i].name) + '</p>')
       )//append
       $('#result #' + drinkfound.result[i].id).popover({
@@ -219,46 +299,20 @@ function GenerateRecipe(DrinkFound){
 
 }
 
-//******************************************
-//ANIMATION PART
-//******************************************
 
-//animate
-  //searchbar hidden
-  $( ".searchbar" ).hide();
-  //height of the div in the home page (picture)
-  var pictureHeight = $(".middle").height();
-  //remove the height of the picture in the main page to the searchbar in order to be on the top
-  $(".searchbar").css( "top", "-" + pictureHeight + "px" );
-  //home page picture move to the left
-  $(".startbutton").click(function(){
-        $(".middle").animate({ 
-          right: '5000px'
-        }, 700 , function(){
-            //search bar appear
-            $( ".searchbar" ).show().animate({
-              left: '1px'
-              }, 200);
-        });
-  });
+   $( document.body ).on( 'click', '.dropdown-menu li', function( event ) {
 
+      var $target = $( event.currentTarget );
 
+      $target.closest( '.input-group-btn' )
+         .find( '[data-bind="label"]' ).text( $target.text() )
+            .end()
+         .children( '.dropdown-toggle' ).dropdown( 'toggle' );
+         TypeOfSearch = $target.text();
+         console.log(TypeOfSearch);
+      return false;
 
-//resize nav bar
-$(window).scroll(function() {
-if ($(this).scrollTop() > 1){  
-    $('.navbar').addClass("sticky");
-    $('body').addClass("sticky");
-    $('.blurheader').addClass("sticky");
-  }
-  else{
-    $('.navbar').removeClass("sticky");
-    $('body').removeClass("sticky");
-    $('.blurheader').removeClass("sticky");
-  }
-});
-
-
+   });
 
 
 

@@ -171,9 +171,10 @@ function OnSuccessDrinkbyIngredient(drinkfound){
             .append('<img src="' + url +'" id="' + drinkfound.result[i].id  + '" alt="' + drinkfound.result[i].id + '" style="width:200px; height:200px;" data-toggle="popover" data-original-title="' + drinkfound.result[i].name + '" /><p>' + JSON.stringify(drinkfound.result[i].name) + '</p>')
         )//append
       }//if
-      /*$('#result #' + drinkfound.result[i].id).popover({
-        content: recette
-      });*/
+      $('#result #' + drinkfound.result[i].id).popover({
+        content: recette,
+        placement: 'top'
+      });
     })//GenerateRecipe
   });//each
 }//OnSuccessDrinkbyIngredient
@@ -256,20 +257,6 @@ if ($(this).scrollTop() > 1){
 });
 
 
-$('#result').on('click', 'img', function() {
-   var b_href = $(this).attr('alt');
-   console.log(b_href);
-   //<td><a href="page-transitions-dialog.html" data-role="button" data-rel="dialog" data-transition="slidedown" data-inline="true">dialog</a></td>
-/*function AjaxCall(Ingredient_ID, action) {
-             }        
-           });*/
-
-  /*$(this).parent().parent().prepend(
-       $('<div />').addClass('col-sm-2 text-center')
-         .append('<p>coucou</p>')
-   )
-  )*/
-});
 
 
 
