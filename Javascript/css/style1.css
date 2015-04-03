@@ -172,19 +172,22 @@ header.tc-header {
 
 #base-spirit-table {
 	background-color: #E8BC6F;
-	border-radius: 6px;
+	border-radius: 5px;
 }
 
 #Mixers-table {
 	background-color: #FF635E;
+	border-radius: 5px;
 }
 
 #Fruit-table {
 	background-color: #C6AEE8;
+	border-radius: 5px;
 }
 
 #Ingredients-table {
 	background-color: #CCF2FF;
+	border-radius: 5px;
 }
 
 a { color: inherit; } 
@@ -216,7 +219,7 @@ tbody{
 
 
 
-
+/*
 @media (min-width: 768px) {
   .container {
     width: 750px;
@@ -232,3 +235,4 @@ tbody{
     width: 1170px;
   }
 }
+*/

@@ -1,25 +1,34 @@
-
+var pictureHeight = 0;
 
 //******************************************
 //ANIMATION PART
 //******************************************
+$(window).load( function(){
+  pictureHeight = $(".middle").height();
 
+})
 //animate
   //searchbar hidden
   $( ".searchbar" ).hide();
   //height of the div in the home page (picture)
-  var pictureHeight = $(".middle").height();
+  
+  console.log(pictureHeight);
   //remove the height of the picture in the main page to the searchbar in order to be on the top
-  $(".searchbar").css( "top", "-" + pictureHeight + "px" );
+  //$(".searchbar").css( "top", "=" + 0 + "px" );
   //home page picture move to the left
   $(".startbutton").click(function(){
         $(".middle").animate({ 
           right: '5000px'
-        }, 700 , function(){
+        }, 800 , function(){
             //search bar appear
-            $( ".searchbar" ).show().animate({
-              left: '1px'
-              }, 200);
+            $( ".searchbar" ).animate({
+              bottom : pictureHeight
+
+              }, 0, function(){
+                $( ".searchbar" ).show().animate({
+                  left: '1px',
+                },200)
+              });
         });
   });
 
@@ -160,26 +169,30 @@ $('body').on('click', '#base-spirit-table a, #Mixers-table a, #Fruit-table a, #I
 *         "add" adds the id of the ingredient to the query then do the ajax call
 *         "delete" delete the id of the ingredient to the query then do the ajax call if there at least one ingredient in the query
 */
+
+//ingredientQuery is a tab which contains the selected ingredients      
+var ingredientQuery =[];
+
+/*This variable will be used to generate the query passed to the api : the api wants an url with this form 
+"with/lemonade" in order to send the list of the cocktail that we can make with those ingredients*/
+var querry = null;
+
 function AjaxCall(Ingredient_ID, action) {
   if(!Ingredient_ID) {
             console.log("no ingredient passed");
         }
-  //ingredientQuery is a tab which contains the selected ingredients      
-  var ingredientQuery =[];
 
-  /*This variable will be used to generate the query passed to the api : the api wants an url with this form 
-  "with/lemonade" in order to send the list of the cocktail that we can make with those ingredients*/
-  var querry = '';
-  
   /* if we want to add new ingredients to the query we go in this boucle */
   if(action == 'add') {      
     ingredientQuery.push(Ingredient_ID);
     
     /* construct the string which will be send to the API's server */
-    for(i = 0; i < ingredientQuery.length; ++i){
-      querry += 'with/' + ingredientQuery[i] + '/';
-    }//for
-  }//if
+    if(querry == null){
+      querry = 'with/' + Ingredient_ID + '/';
+    }else {
+        querry += Ingredient_ID + '/';
+    }//if(query)
+  }//if(action)
 
   /* if we want to delete ingredients (when a tag is deleted) to the query we go in this boucle */
   else if(action == 'delete'){
@@ -187,7 +200,7 @@ function AjaxCall(Ingredient_ID, action) {
     ingredientQuery.splice(IDPos, 1)
 
     /* recreate the query with the element which have not been removed */
-    querry = '';
+    querry = null;
     for(i = 0; i < ingredientQuery.length; ++i){
       querry += 'with/' + ingredientQuery[i] + '/';
     }//for
@@ -197,7 +210,7 @@ function AjaxCall(Ingredient_ID, action) {
   }//else
 
   else if(action == 'delete_all'){
-    querry ='';
+    querry = null;
     ClearDrinkShow();
 
   }
@@ -206,34 +219,30 @@ function AjaxCall(Ingredient_ID, action) {
   if(ingredientQuery.length >= 1){
     $('#result').html('<img src="img/ajax-loader.gif" id="loading" alt="loading" loop=infinite class="img-responsive center-block">');
 
-      // Call ajax after 0,8 seconds, time for the loading Gif to load at least once, more if the ajax call is longer
+      // Call ajax, always show the loading gif and when the call is complete, it calls the function to show the drinks found
       $.ajax({
       type: 'GET',
       url: "http://addb.absolutdrinks.com/drinks/" + querry + "?apiKey=c5be6662554341cdac0fd78d1677193a",
       dataType: 'jsonp',  
       crossDomain: true,
       success: OnSuccessDrinkbyIngredient,
-      
       error: function(xhr, error){
         alert(xhr.responseText + ' ' + error + ' ' + xhr.status);
       }}).always(function(){
         $('#loading').remove();
       });
-       
-
-     //show the loading gif
-      
   }//if    
 }//AjaxCall
 
 
 //show the picture of the drinks found and generate the popover
 function OnSuccessDrinkbyIngredient(drinkfound){
+  /*if(drinkfound == undefined){
+    $('#result').children().fadeOut();
+    return;
+  }*/
   var url;
-  $('#result').children().remove();
-  $('#result').append(
-    $('<div />').addClass('row')
-  )
+  ClearDrinkShow();
   
   //contient la recette
   //console.log(drinkfound);
@@ -269,7 +278,7 @@ $(function (){
 
 
 function ClearDrinkShow(){
-  $('#result').children().remove();
+  $('#result').children().fadeOut();
 }
 
   
@@ -313,11 +322,4 @@ function GenerateRecipe(DrinkFound){
       return false;
 
    });
-
-
-
-
-
-
-
 
