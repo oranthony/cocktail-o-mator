@@ -1,8 +1,30 @@
-var pictureHeight = 0;
+//******************************************
+//Redirect to mobile site
+//******************************************
+
+if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
+  window.location = "http://test.anthonyloroscio.fr/mobile.html"
+}
+
+//******************************************
+//Not allow to press the key enter
+//******************************************
+
+$('#searchbar').on("keyup keypress", function(e) {
+  var code = e.keyCode || e.which; 
+  if (code  == 13) {               
+    e.preventDefault();
+    return false;
+  }
+});
+
+
 
 //******************************************
 //ANIMATION PART
 //******************************************
+
+var pictureHeight = 0;
 $(window).load( function(){
   pictureHeight = $(".middle").height();
 
@@ -12,7 +34,7 @@ $(window).load( function(){
   $( ".searchbar" ).hide();
   //height of the div in the home page (picture)
   
-  console.log(pictureHeight);
+  //console.log(pictureHeight);
   //remove the height of the picture in the main page to the searchbar in order to be on the top
   //$(".searchbar").css( "top", "=" + 0 + "px" );
   //home page picture move to the left
@@ -62,7 +84,7 @@ if ($(this).scrollTop() > 1){
       if(TypeOfSearch =='Ingredient') {
         console.log("ingred");
         var dInput = this.value;
-        if(dInput.length > 1){
+        if(dInput.length > 0){
           $.ajax({
               type: 'GET',
               url: "http://addb.absolutdrinks.com/quickSearch/ingredients/"+  dInput +"?apiKey=c5be6662554341cdac0fd78d1677193a",
@@ -79,9 +101,15 @@ if ($(this).scrollTop() > 1){
         //clear tags
         $("#myTags").children().fadeOut();
         AjaxCall(null, 'delete_all');
+        //clear tables
+        $('#base-spirit-table').children().fadeOut();
+        $('#Mixers-table').children().fadeOut();
+        $('#Fruit-table').children().fadeOut();
+        $('#Ingredients-table').children().fadeOut();
         //search for dirnks
         var dInput = this.value;
-        if(dInput.length > 1){
+        console.log(dInput);
+        if(dInput.length > 0){
           $('#result').html('<img src="img/ajax-loader.gif" id="loading" alt="loading" loop=infinite class="img-responsive center-block">');
           $.ajax({
             type: 'GET',
@@ -104,39 +132,30 @@ function OnSuccesstabIngredient(json){
 
   //base spirit
   $('#base-spirit-table').html('<thead><tr><th>Base spirit</th></tr></thead>');
-  $.each(json, function (key, data) {
-    $.each(data, function (index, data) {
-      if(data.isBaseSpirit == true || data.type == 'spirits-other')
-        $('#base-spirit-table').append('<tr><td><a href='+JSON.stringify(data.id)+'>' + JSON.stringify(data.name) + '</a></td></tr>');
-    })
+  $.each(json.result, function (key, data) {
+    if(data.isBaseSpirit == true || data.type == 'spirits-other')
+      $('#base-spirit-table').append('<tr><td><a href='+JSON.stringify(data.id)+'>' + JSON.stringify(data.name) + '</a></td></tr>');
   })
  
   //mixers"type":"mixers"
   $('#Mixers-table').html('<thead><tr><th>Mixers</th></tr></thead>');
-  $.each(json, function (key, data) {
-    $.each(data, function (index, data) {
-      if(data.type == 'mixers')
-        $('#Mixers-table').append('<tr><td><a href='+JSON.stringify(data.id)+'>' + JSON.stringify(data.name) + '</a></td></tr>');
-    })
+  $.each(json.result, function (key, data) {
+    if(data.type == 'mixers')
+      $('#Mixers-table').append('<tr><td><a href='+JSON.stringify(data.id)+'>' + JSON.stringify(data.name) + '</a></td></tr>');
   })
 
   //fruit
   $('#Fruit-table').html('<thead><tr><th>Fruits</th></tr></thead>');
-  $.each(json, function (key, data) {
-
-    $.each(data, function (index, data) {
-      if(data.type == 'fruits')
-        $('#Fruit-table').append('<tr><td><a href='+JSON.stringify(data.id)+'>' + JSON.stringify(data.name) + '</a></td></tr>');
-    })
+  $.each(json.result, function (key, data) {
+    if(data.type == 'fruits')
+      $('#Fruit-table').append('<tr><td><a href='+JSON.stringify(data.id)+'>' + JSON.stringify(data.name) + '</a></td></tr>');
   })
 
   //Ingredients
   $('#Ingredients-table').html('<thead><tr><th>Ingredients</th></tr></thead>');
-  $.each(json, function (key, data) {
-    $.each(data, function (index, data) {
+  $.each(json.result, function (key, data) {
       if(data.type == 'others')
         $('#Ingredients-table').append('<tr><td><a href='+JSON.stringify(data.id)+'>' + JSON.stringify(data.name) + '</a></td></tr>');
-    })
   })
 }//OnSuccesstabIngredient
 
@@ -200,11 +219,12 @@ function AjaxCall(Ingredient_ID, action) {
     ingredientQuery.splice(IDPos, 1)
 
     /* recreate the query with the element which have not been removed */
-    querry = null;
+    querry = '';
     for(i = 0; i < ingredientQuery.length; ++i){
       querry += 'with/' + ingredientQuery[i] + '/';
     }//for
     if(ingredientQuery.length == 0){
+      querry = null;
       ClearDrinkShow();
     }//if
   }//else
@@ -216,7 +236,7 @@ function AjaxCall(Ingredient_ID, action) {
   }
 
   /* Start to search when there is almost 1 ingredient in the query, Here I'm sure the ajax is not called when all the ingredients of the query are deleted */
-  if(ingredientQuery.length >= 1){
+  if(ingredientQuery){
     $('#result').html('<img src="img/ajax-loader.gif" id="loading" alt="loading" loop=infinite class="img-responsive center-block">');
 
       // Call ajax, always show the loading gif and when the call is complete, it calls the function to show the drinks found
@@ -242,25 +262,42 @@ function OnSuccessDrinkbyIngredient(drinkfound){
     return;
   }*/
   var url;
-  ClearDrinkShow();
-  
+  console.log(drinkfound);
+
+  if(drinkfound.totalResult == 0){
+    ClearDrinkShow();
+  }
+
+  if(drinkfound.next) {
+    $('.searchbar').append(
+      $('<div />').addClass('more'))
+      $('.more').append(
+      $('<div />').addClass('row'),
+      $('<div />').addClass('row')
+      .append('<button id="morebutton" class="btn btn-default col-xs-4 col-xs-offset-4 col-sm-4 col-sm-offset-4 col-md-4 col-md-offset-4"  alt="' + drinkfound.next + '" type="submit">More</button>'))
+  };
+
+  $('#result').append($('<div />').addClass('row'));
+
   //contient la recette
-  //console.log(drinkfound);
   $.each(drinkfound.result, function (i, item) {
     //console.log(drinkfound.result[i].id);
     url = decodeURI('http://assets.absolutdrinks.com/drinks/transparent-background-white/180x180/'+drinkfound.result[i].id+'.png');
     var recette;
     //console.log(GenerateRecipe(drinkfound.result[i].id));
     GenerateRecipe(drinkfound.result[i].id).success(function (data){
-      console.log(data);
+      //console.log(data);
       var step = ' ';
       for(i = 0; i < data.steps.length; ++i){
         //step[i] = drinkInfo.steps[i].textPlain;
         step += data.steps[i].textPlain + ' ';
       }
       recette = step;
-      $('#result').append(
-        $('<div />').addClass('col-md-2 col-sm-2 col-lg-2 text-center')
+      if (drinkfound.result[i] == undefined){
+        return;
+      }
+      $('#result').children().append(
+        $('<div />').addClass('col-md-auto col-md-3 text-center')
           .append('<img src="' + url +'" id="' + drinkfound.result[i].id  + '" alt="' + drinkfound.result[i].id + '" style="width:200px; height:200px;" data-toggle="popover" data-original-title="' + drinkfound.result[i].name + '" /><p>' + JSON.stringify(drinkfound.result[i].name) + '</p>')
       )//append
       $('#result #' + drinkfound.result[i].id).popover({
@@ -279,6 +316,7 @@ $(function (){
 
 function ClearDrinkShow(){
   $('#result').children().fadeOut();
+  $('.more').fadeOut();
 }
 
   
@@ -286,10 +324,26 @@ function ClearDrinkShow(){
 $("#myTags").on('click', '.tag-close', function() {
   $(this).parent().fadeOut();
   var deleted_tag = $(this).parent().attr('class');
-  console.log("deleted tag");
-  console.log(deleted_tag);
+  //console.log("deleted tag");
+  //console.log(deleted_tag);
   AjaxCall(deleted_tag, 'delete');
 
+})
+
+$(document.body).on('click', '#morebutton', function() {
+  var more = $(this).attr("alt");
+  console.log(more);
+  $.ajax({
+    type: 'GET',
+    url: more,
+    dataType: 'jsonp',  //use jsonp data type in order to perform cross domain ajax
+    crossDomain: true,
+    success : OnSuccessDrinkbyIngredient,
+    error: function(xhr, error){
+      alert(xhr.responseText + ' ' + error + ' ' + xhr.status);
+    }        
+  });
+  $('.more').fadeOut();
 })
 
 function GenerateRecipe(DrinkFound){

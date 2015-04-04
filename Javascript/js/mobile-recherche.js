@@ -16,6 +16,8 @@ $('#searchbar').on("input", function() {
   }//i
 });
 
+//*******************name of table changed
+
 //show the ingredient found in the tab of the type of the ingredient
 function OnSuccesstabIngredient(json){
 
@@ -58,6 +60,8 @@ function OnSuccesstabIngredient(json){
   })
   //$('#base-spirit').
 }//OnSuccesstabIngredient
+
+//*******************name of table changed
 
 /* When the user click on an ingredient on the table, this function generate the tag then call the function AjaxCall with the selected ingredient*/
 $('body').on('click', '#base-spirit a, #mixers a, #fruit a, #ingredients a', function(event) {
@@ -125,7 +129,7 @@ function AjaxCall(Ingredient_ID, action) {
   }//else
 
   /* Start to search when there is almost 1 ingredient in the query, Here I'm sure the ajax is not called when all the ingredients of the query are deleted */
-  if(ingredientQuery.length >= 1){
+  if(ingredientQuery.length > 0){
     setTimeout(function() {
       // Call ajax after 0,8 seconds, time for the loading Gif to load at least once, more if the ajax call is longer
       $.ajax({
