@@ -153,14 +153,9 @@ function AjaxCall(Ingredient_ID, action) {
 function OnSuccessDrinkbyIngredient(drinkfound){
   var url;
   $('#result').children().remove();
-  
-  //contient la recette
-  //console.log(drinkfound);
   $.each(drinkfound.result, function (i, item) {
-    //console.log(drinkfound.result[i].id);
     url = decodeURI('http://assets.absolutdrinks.com/drinks/transparent-background-white/180x180/'+drinkfound.result[i].id+'.png');
     var recette;
-    //console.log(GenerateRecipe(drinkfound.result[i].id));
     GenerateRecipe(drinkfound.result[i].id).success(function (data){
       console.log(data);
       var step = ' ';
@@ -189,7 +184,6 @@ $(function (){
 });
 
 
-
 function ClearDrinkShow(){
   $('#result').children().remove();
 }
@@ -206,9 +200,6 @@ $("#myTags").on('click', '.tag-close', function() {
 })
 
 function GenerateRecipe(DrinkFound){
-  //console.log("appel depuis la fonct");
-  //console.log(DrinkId);
-
   return $.ajax({
     type: 'GET',
     url: "http://addb.absolutdrinks.com/drinks/" + DrinkFound + "/howtomix/?apiKey=c5be6662554341cdac0fd78d1677193a",
@@ -218,47 +209,8 @@ function GenerateRecipe(DrinkFound){
       alert(xhr.responseText + ' ' + error + ' ' + xhr.status);
     }        
   });
-
 }
 
-//******************************************
-//ANIMATION PART
-//******************************************
-
-//animate
-  //searchbar hidden
-  $( ".searchbar" ).hide();
-  //height of the div in the home page (picture)
-  var pictureHeight = $(".middle").height();
-  //remove the height of the picture in the main page to the searchbar in order to be on the top
-  $(".searchbar").css( "top", "-" + pictureHeight + "px" );
-  //home page picture move to the left
-  $(".startbutton").click(function(){
-        $(".middle").animate({ 
-          right: '5000px'
-        }, 700 , function(){
-            //search bar appear
-            $( ".searchbar" ).show().animate({
-              left: '1px'
-              }, 200);
-        });
-  });
-
-
-
-//resize nav bar
-$(window).scroll(function() {
-if ($(this).scrollTop() > 1){  
-    $('.navbar').addClass("sticky");
-    $('body').addClass("sticky");
-    $('.blurheader').addClass("sticky");
-  }
-  else{
-    $('.navbar').removeClass("sticky");
-    $('body').removeClass("sticky");
-    $('.blurheader').removeClass("sticky");
-  }
-});
 
 
 

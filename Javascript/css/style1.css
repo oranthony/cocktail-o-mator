@@ -11,106 +11,25 @@ body {
 	display: block;
 }
 
-body.sticky {
-	background-color: #e9ffd2;
-	padding-top: 160px;
+*, *:after, *:before {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
 }
 
-			*, *:after, *:before {
-			    -webkit-box-sizing: border-box;
-			    -moz-box-sizing: border-box;
-			    box-sizing: border-box;
-			}
-
+.row {
+	position: relative;
+	margin-left: 30px;	
+}
 
 #loading {
 	height: 200px;
 	width: 200px;
 }
 
-
-/*.blurheader{
-	background: transparent;
-	overflow: hidden;
-	z-index: 10000;
-	
-	left: 0;
-
-	background-color: #e9ffd2;
-	height: 190px;
-	position: fixed;
-	width: 100%;
-	
-	top: 0;
-	border-bottom:1px solid rgba(0,0,0,.2);
-	
-}
-
-.blurheader.sticky{
-	background: transparent;
-	overflow: hidden;
-	z-index: 10000;
-	
-	left: 0;
-
-	background-color: #e9ffd2;
-	height: 170px;
-	position: fixed;
-	width: 100%;
-	
-	top: 0;
-	border-bottom:1px solid rgba(0,0,0,.2);
-	
-}
-
-#canvas{
-	opacity:1;
-  	z-index: 100;
-  	position: absolute;
-  	display: block;
-  	top: 3px;
-}*/
-
-
-
-
-#base-spirit-table-tag {
-	background-color: #E8BC6F;
-}
-
-#Mixers-table-tag {
-	background-color: #FF635E;
-}
-
-#Fruit-table-tag {
-	background-color: #C6AEE8;
-} 
-
-#Ingredients-table-tag {
-	background-color: #CCF2FF;
-}
-
-
-#base-spirit-table-tag, #Mixers-table-tag, #Fruit-table-tag, #Ingredients-table-tag {
-	/*display: table;*/
-	padding: 8px;
-	margin-left: 30px;
-	border-radius: 50px;
-	text-align: right;
-}
-
-
-/*#tag:after {
-	content: "x";
-}*/
-
-.tag-close:before {
-	margin-left: 5px;
-}
-
-.tag-close {
-	cursor: pointer;
-}
+/******************************************
+//NavBar management
+//******************************************/
 
 .navbar {
 	background-color: #e9ffd2;
@@ -130,9 +49,57 @@ header.tc-header {
 	z-index: 10000000000;
 }
 
+
+/******************************************
+//Tag management
+//******************************************/
+
+#base-spirit-table-tag {
+	background-color: #E8BC6F;
+}
+
+#Mixers-table-tag {
+	background-color: #FF635E;
+}
+
+#Fruit-table-tag {
+	background-color: #C6AEE8;
+} 
+
+#Ingredients-table-tag {
+	background-color: #CCF2FF;
+}
+
+#base-spirit-table-tag, #Mixers-table-tag, #Fruit-table-tag, #Ingredients-table-tag {
+	display: inline-block;
+	padding: 8px;
+	margin-left: 30px;
+	border-radius: 50px;
+	text-align: right;
+}
+
+.tag-close:before {
+	margin-left: 5px;
+}
+
+.tag-close {
+	cursor: pointer;
+}
+
+a { color: inherit; } 
+
+/******************************************
+//Resize the navbar and body on scroll
+//******************************************/
+
 .navbar.sticky img {
 	height: 50%;
 	width: 50%;
+}
+
+body.sticky {
+	background-color: #e9ffd2;
+	padding-top: 160px;
 }
 
 
@@ -144,8 +111,6 @@ header.tc-header {
 .middle {
 	position: relative;
 	text-align: center;
-
-
 }
 
 .searchbar form {
@@ -158,11 +123,9 @@ header.tc-header {
 	left: 5000px;
 }
 
-.row {
-	position: relative;
-	margin-left: 30px;
-	
-}
+/******************************************
+//Management of the table
+//******************************************/
 
 .table1 {
 	overflow: auto;
@@ -190,49 +153,10 @@ header.tc-header {
 	border-radius: 5px;
 }
 
-a { color: inherit; } 
-
+/******************************************
+//Management of popover for the recipe
+//******************************************/
 
 .popover{
 	min-width: 350px;
 }
-
-/*tr {
-	width: 100%;
-	display: inline-table;
-}
-
-table{
-	max-height: 500px;
-}
-
-tbody{
-	overflow-y: scroll;
-	max-height: 490px;
-	width: 90%; 
-	position: absolute;
-}
-*/
-
-
-
-
-
-
-/*
-@media (min-width: 768px) {
-  .container {
-    width: 750px;
-  }
-}
-@media (min-width: 992px) {
-  .container {
-    width: 970px;
-  }
-}
-@media (min-width: 1200px) {
-  .container {
-    width: 1170px;
-  }
-}
-*/
