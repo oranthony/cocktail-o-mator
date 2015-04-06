@@ -80,7 +80,8 @@ $('#searchbar').on("input", function() {
     if(dInput.length > 0){
       $.ajax({
           type: 'GET',
-          url: "http://addb.absolutdrinks.com/quickSearch/ingredients/"+  dInput +"?apiKey=c5be6662554341cdac0fd78d1677193a",
+          url: "http://addb.absolutdrinks.com/quickSearch/ingredients/"+  dInput +
+          "?apiKey=c5be6662554341cdac0fd78d1677193a",
           dataType: 'jsonp',  
           crossDomain: true,
           success: OnSuccesstabIngredient,
@@ -105,10 +106,12 @@ $('#searchbar').on("input", function() {
     //search for dirnks
     var dInput = this.value;
     if(dInput.length > 0){
-      $('#result').html('<img src="img/ajax-loader.gif" id="loading" alt="loading" loop=infinite class="img-responsive center-block">');
+      $('#result').html('<img src="img/ajax-loader.gif" id="loading" alt="loading"' +
+       'loop=infinite class="img-responsive center-block">');
       $.ajax({
         type: 'GET',
-        url: "http://addb.absolutdrinks.com/quickSearch/drinks/" + dInput + "/?apiKey=c6d792879d4b44119788eefc6748393a",
+        url: "http://addb.absolutdrinks.com/quickSearch/drinks/" + dInput + 
+        "/?apiKey=c6d792879d4b44119788eefc6748393a",
         dataType : 'jsonp',
         crossDomain: true,
         success: OnSuccessDrinkbyIngredient,
@@ -129,32 +132,37 @@ function OnSuccesstabIngredient(json){
   $('#base-spirit-table').html('<thead><tr><th>Base spirit</th></tr></thead>');
   $.each(json.result, function (key, data) {
     if(data.isBaseSpirit == true || data.type == 'spirits-other')
-      $('#base-spirit-table').append('<tr><td><a href='+JSON.stringify(data.id)+'>' + JSON.stringify(data.name) + '</a></td></tr>');
+      $('#base-spirit-table').append('<tr><td><a href='+JSON.stringify(data.id)+'>' 
+        + JSON.stringify(data.name) + '</a></td></tr>');
   })
  
   //mixers"type":"mixers"
   $('#Mixers-table').html('<thead><tr><th>Mixers</th></tr></thead>');
   $.each(json.result, function (key, data) {
     if(data.type == 'mixers')
-      $('#Mixers-table').append('<tr><td><a href='+JSON.stringify(data.id)+'>' + JSON.stringify(data.name) + '</a></td></tr>');
+      $('#Mixers-table').append('<tr><td><a href='+JSON.stringify(data.id)+'>' 
+        + JSON.stringify(data.name) + '</a></td></tr>');
   })
 
   //fruit
   $('#Fruit-table').html('<thead><tr><th>Fruits</th></tr></thead>');
   $.each(json.result, function (key, data) {
     if(data.type == 'fruits')
-      $('#Fruit-table').append('<tr><td><a href='+JSON.stringify(data.id)+'>' + JSON.stringify(data.name) + '</a></td></tr>');
+      $('#Fruit-table').append('<tr><td><a href='+JSON.stringify(data.id)+'>' 
+        + JSON.stringify(data.name) + '</a></td></tr>');
   })
 
   //Ingredients
   $('#Ingredients-table').html('<thead><tr><th>Ingredients</th></tr></thead>');
   $.each(json.result, function (key, data) {
     if(data.type == 'others')
-      $('#Ingredients-table').append('<tr><td><a href='+JSON.stringify(data.id)+'>' + JSON.stringify(data.name) + '</a></td></tr>');
+      $('#Ingredients-table').append('<tr><td><a href='+JSON.stringify(data.id)+'>' 
+        + JSON.stringify(data.name) + '</a></td></tr>');
   })
 }//OnSuccesstabIngredient
 
-/* When the user click on an ingredient on the table, this function generate the tag then call the function AjaxCall with the selected ingredient*/
+/* When the user click on an ingredient on the table, this function generate the tag then call the function AjaxCall 
+with the selected ingredient*/
 $('body').on('click', '#base-spirit-table a, #Mixers-table a, #Fruit-table a, #Ingredients-table a', function(event) {
   event.preventDefault();
 
@@ -164,14 +172,16 @@ $('body').on('click', '#base-spirit-table a, #Mixers-table a, #Fruit-table a, #I
     //ID of the ingredient
     var Ingredient_ID = $(this).attr('href');
 
-    //get the type of the selected ingredient (base-spirit, fruits.....) to have the tag and the table with the same color
+    /*get the type of the selected ingredient (base-spirit, fruits.....) to have the tag and the table 
+    with the same color*/
     var typofTag = $(this).closest('.table').attr('id');
 
     //create the tag
     typofTag += "-tag";
 
     //show the tag
-    $("#myTags").append('<span id='+ typofTag +' class=' + Ingredient_ID +'>' + Ingredient_Name + '<span class="glyphicon glyphicon-record tag-close"></span></span>')
+    $("#myTags").append('<span id='+ typofTag +' class=' + Ingredient_ID +'>' + Ingredient_Name 
+      + '<span class="glyphicon glyphicon-record tag-close"></span></span>')
 
     //call the function AjaxCall to generate the result with the new Ingredient
     AjaxCall(Ingredient_ID, 'add');
@@ -183,7 +193,8 @@ $('body').on('click', '#base-spirit-table a, #Mixers-table a, #Fruit-table a, #I
 *Ingredient_ID : ID of the ingredient you want to add or remove
 *action : add or delete
 *         "add" adds the id of the ingredient to the query then do the ajax call
-*         "delete" delete the id of the ingredient to the query then do the ajax call if there at least one ingredient in the query
+*         "delete" delete the id of the ingredient to the query then do the ajax call if there at least one
+           ingredient in the query
 *         "delete_all" delete the whole query       
 */
 
@@ -232,13 +243,16 @@ function AjaxCall(Ingredient_ID, action) {
     ClearDrinkShow();
   }//else if
 
-  /* Start to search when there is almost 1 ingredient in the query, Here I'm sure the ajax is not called when all the ingredients of the query are deleted */
+  /* Start to search when there is almost 1 ingredient in the query, Here I'm sure the ajax is not called when 
+  all the ingredients of the query are deleted */
   if(ingredientQuery){
 
     //always show the loading gif
-    $('#result').html('<img src="img/ajax-loader.gif" id="loading" alt="loading" loop=infinite class="img-responsive center-block">');
+    $('#result').html('<img src="img/ajax-loader.gif" id="loading" alt="loading"' +
+     'loop=infinite class="img-responsive center-block">');
 
-      // Call ajax, remove the loading gif when the call is complete, and then calls the function to show the drinks found
+      /* Call ajax, remove the loading gif when the call is complete, and then calls the function to show the drinks 
+      found*/
       $.ajax({
       type: 'GET',
       url: "http://addb.absolutdrinks.com/drinks/" + querry + "?apiKey=c5be6662554341cdac0fd78d1677193a",
@@ -272,13 +286,15 @@ function OnSuccessDrinkbyIngredient(drinkfound){
       $('.more').append(
       $('<div />').addClass('row'),
       $('<div />').addClass('row')
-      .append('<button id="morebutton" class="btn btn-default col-xs-4 col-xs-offset-4 col-sm-4 col-sm-offset-4 col-md-4 col-md-offset-4"  alt="' + drinkfound.next + '" type="submit">More</button>'))
+      .append('<button id="morebutton" class="btn btn-default col-xs-4 col-xs-offset-4 col-sm-4 col-sm-offset-4' +  
+        'col-md-4 col-md-offset-4"  alt="' + drinkfound.next + '" type="submit">More</button>'))
   };
 
   $('#result').append($('<div />').addClass('row'));
 
   $.each(drinkfound.result, function (i, item) {
-    url = decodeURI('http://assets.absolutdrinks.com/drinks/transparent-background-white/180x180/'+drinkfound.result[i].id+'.png');
+    url = decodeURI('http://assets.absolutdrinks.com/drinks/transparent-background-white/180x180/'
+      +drinkfound.result[i].id+'.png');
     
     //This var will contain the recipe of the cocktails
     var recipe;
@@ -293,14 +309,19 @@ function OnSuccessDrinkbyIngredient(drinkfound){
         //step[i] = drinkInfo.steps[i].textPlain;
         step += data.steps[i].textPlain + ' ';
       }
+
       recipe = step;
       if (drinkfound.result[i] == undefined){
         return;
       }
+
       $('#result').children().append(
         $('<div />').addClass('col-md-auto col-md-3 text-center')
-          .append('<img src="' + url +'" id="' + drinkfound.result[i].id  + '" alt="' + drinkfound.result[i].id + '" style="width:200px; height:200px;" data-toggle="popover" data-original-title="' + drinkfound.result[i].name + '" /><p>' + JSON.stringify(drinkfound.result[i].name) + '</p>')
+          .append('<img src="' + url +'" id="' + drinkfound.result[i].id  + '" alt="' + drinkfound.result[i].id 
+            + '" style="width:200px; height:200px;" data-toggle="popover" data-original-title="' 
+            + drinkfound.result[i].name + '" /><p>' + JSON.stringify(drinkfound.result[i].name) + '</p>')
       )//append
+
       $('#result #' + drinkfound.result[i].id).popover({
         content: recipe
       });
@@ -312,6 +333,7 @@ function OnSuccessDrinkbyIngredient(drinkfound){
 function ClearDrinkShow(){
   $('#result').children().fadeOut();
   $('.more').fadeOut();
+
 }
 
   
