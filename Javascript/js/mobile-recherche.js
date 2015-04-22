@@ -168,7 +168,6 @@ function OnSuccessDrinkbyIngredient(drinkfound){
       +drinkfound.result[i].id+'.png');
     var recette;
     GenerateRecipe(drinkfound.result[i].id).success(function (data){
-      console.log(data);
       var step = ' ';
       for(i = 0; i < data.steps.length; ++i){
         //step[i] = drinkInfo.steps[i].textPlain;
@@ -206,8 +205,6 @@ function ClearDrinkShow(){
 $("#myTags").on('click', '.tag-close', function() {
   $(this).parent().fadeOut();
   var deleted_tag = $(this).parent().attr('class');
-  console.log("deleted tag");
-  console.log(deleted_tag);
   AjaxCall(deleted_tag, 'delete');
 
 })
